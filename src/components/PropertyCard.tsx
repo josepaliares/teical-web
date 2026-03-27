@@ -18,7 +18,7 @@ export function PropertyCard() {
         />
 
         <div className="absolute top-2 left-2 bg-black/40 backdrop-blur-sm p-1 rounded-md z-10">
-          <img src="/fogo.svg" alt="Destaque" className="w-4 h-4" />
+          <img src="/fire.svg" alt="Destaque" className="w-4 h-4" />
         </div>
       </div>
 

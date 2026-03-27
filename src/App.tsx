@@ -5,7 +5,7 @@ import Login from './pages/Login';
 
 function App() {
   return (
-    <Router> 
+    <Router basename='{import.meta.env.BASE_URL}'> 
       <Routes>
         {/* Routes with MainLayout (with Navbar and Footer) */}
         <Route element={<MainLayout />}>
