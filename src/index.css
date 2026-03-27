@@ -1,28 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-  /* Basic Colors */
-  --color-white: #ffffff;
-  --color-black: #000000;
-
-  --color-green: #6fdc8c;
-
-  /* Gray Scale (10 to 100) */
-  --color-gray-10:  #f4f4f4;
-  --color-gray-20:  #e0e0e0;
-  --color-gray-30:  #c6c6c6;
-  --color-gray-40:  #a8a8a8;
-  --color-gray-50:  #8d8d8d;
-  --color-gray-60:  #6f6f6f;
-  --color-gray-70:  #525252;
-  --color-gray-80:  #393939;
-  --color-gray-90:  #262626;
-  --color-gray-100: #161616;
-
   /* Teical Identity */
   --color-primary:   #061727;
+  --color-primary-light: #1a2e5b;
+  --color-primary-dark: #040f1a;
+
   --color-secondary: #63d1d0;
+  --color-secondary-light: #a0e7e5;
+  --color-secondary-dark: #318988;
 
   /* Fonts */
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-secondary hover:bg-secondary-dark text-primary px-4 py-3 rounded-full 
+           font-bold transition-all duration-200 items-center justify-center w-fit;
+  }
 }

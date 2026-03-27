@@ -8,5 +8,5 @@ export default defineConfig({
     react(),
     tailwindcss()
   ],
-  base: '/teical-web/',
+  base: process.env.NODE_ENV === 'production' ? '/teical-web/' : '/',
 })
