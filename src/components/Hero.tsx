@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { PropertyCard } from "./PropertyCard";
 
 export function Hero() {
 
@@ -19,11 +20,19 @@ export function Hero() {
                 Ver imóveis
             </Link>
         </div>
-        <div className="flex-col w-full">
-            <span className="text-xl font-semibold text-white">Destaques</span>
-            <div className="flex">
-                <div className="flex-col"></div>
-                <div className="flex-col"></div>
+        <div className="flex flex-col w-full items-center pt-10 pr-8">
+            <span className="text-4xl font-bold text-white">Destaques</span>
+            <div className="flex gap-6 mt-6">
+                <div className="flex flex-col gap-6">
+                    <PropertyCard />
+                    <PropertyCard />
+                    <PropertyCard />
+                </div>
+                <div className="flex flex-col gap-6">
+                    <PropertyCard />
+                    <PropertyCard />
+                    <PropertyCard />
+                </div>
             </div>
         </div>
     </div>

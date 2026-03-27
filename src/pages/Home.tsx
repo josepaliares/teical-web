@@ -1,4 +1,5 @@
-import { Hero } from "../components/Home/Hero"
+import { Hero } from "../components/Hero"
+
 
 function Home() {
   return (
