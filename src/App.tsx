@@ -1,10 +1,22 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { MainLayout } from './layouts/MainLayout';
+import Home from './pages/Home';
+import Login from './pages/Login';
+
 function App() {
   return (
-    <div className="bg-primary border w-full min-h-screen flex flex-col items-center justify-center">
-      <h1 className="text-secondary text-8xl font-bold">Teical</h1>
-      <h2 className="text-gray-30 text-xl mb-4">A Inteligência que arremata</h2>
-    </div>
-  )
+    <Router> 
+      <Routes>
+        {/* Routes with MainLayout (with Navbar and Footer) */}
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Home />} />
+        </Route>
+
+        {/* Route without MainLayout */}
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
