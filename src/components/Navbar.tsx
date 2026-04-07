@@ -12,7 +12,7 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', scrollHandler);
   }, [top]);
 
-  const baseLink = "px-3 py-2 transition-colors duration-200 hover:text-secondary";
+  const baseLink = "text-sm px-3 py-2 transition-colors duration-200 hover:text-secondary";
   const activeLink = "text-secondary font-bold border-b-2 border-secondary";
   
   return (
@@ -29,22 +29,45 @@ export function Navbar() {
           </div>
 
           <nav className="hidden md:flex grow justify-center">
-            <ul className="flex items-center gap-6">
-              <li>
-                <NavLink 
-                  to="/" 
-                  className={({ isActive }) => `${baseLink} ${isActive ? activeLink : 'text-gray-300'}`}
-                >
-                  Home
-                </NavLink>
-                
-              </li>
+            <ul className="flex items-center gap-3">
               <li>
                 <NavLink 
                   to="/imoveis" 
                   className={({ isActive }) => `${baseLink} ${isActive ? activeLink : 'text-gray-300'}`}
                 >
                   Imóveis
+                </NavLink>
+              </li>
+              <li>
+                <NavLink 
+                  to="/quem-somos" 
+                  className={({ isActive }) => `${baseLink} ${isActive ? activeLink : 'text-gray-300'}`}
+                >
+                  Quem somos
+                </NavLink>
+              </li>
+              <li>
+                <NavLink 
+                  to="/noticias" 
+                  className={({ isActive }) => `${baseLink} ${isActive ? activeLink : 'text-gray-300'}`}
+                >
+                  Notícias
+                </NavLink>
+              </li>
+              <li>
+                <NavLink 
+                  to="/conexoes" 
+                  className={({ isActive }) => `${baseLink} ${isActive ? activeLink : 'text-gray-300'}`}
+                >
+                  Conexões
+                </NavLink>
+              </li>
+              <li>
+                <NavLink 
+                  to="/contato" 
+                  className={({ isActive }) => `${baseLink} ${isActive ? activeLink : 'text-gray-300'}`}
+                >
+                  Contato
                 </NavLink>
               </li>
             </ul>
