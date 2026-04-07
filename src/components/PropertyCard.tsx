@@ -4,7 +4,7 @@ import ShowerIcon from '@mui/icons-material/Shower';
 
 export function PropertyCard() {
   return (
-    <Link to="/" className="bg-secondary-dark/10 rounded-lg overflow-hidden border border-transparent hover:border-secondary transition-all group flex h-36 w-80 relative">
+    <Link to="/imovel" className="bg-secondary-dark/10 rounded-lg overflow-hidden border border-transparent hover:border-secondary transition-all group flex h-36 w-80 relative">
 
       <div className="absolute top-2 right-2 z-20 bg-secondary text-primary font-black text-[10px] w-10 h-5 rounded-full flex items-center justify-center shadow-lg border border-black/10">
         85/100
