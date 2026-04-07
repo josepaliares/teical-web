@@ -1,69 +1,149 @@
+import { useState, useMemo } from 'react';
 import { PropertyListCard } from "../components/PropertyListCard";
+import type { PropertyData } from "../types";
 
-export default function Imoveis() {
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+
+export default function Imoveis({ allProperties }: { allProperties: PropertyData[] }) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const itemsPerPage = 10;
+
+  const categorias = ['Casa', 'Apartamento', 'Galpão', 'Lajes', 'Outros'];
+
+  // 1. FILTRAGEM (O useMemo garante que isso só mude quando o filtro mudar)
+  const filteredProperties = useMemo(() => {
+    if (selectedCategories.length === 0) return allProperties;
+    return allProperties.filter(item => selectedCategories.includes(item.categoria));
+  }, [allProperties, selectedCategories]);
+
+  // 2. PAGINAÇÃO (Calculada sobre os itens já filtrados)
+  const totalPages = Math.ceil(filteredProperties.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredProperties.slice(indexOfFirstItem, indexOfLastItem);
+
+  const toggleCategory = (cat: string) => {
+    setCurrentPage(1); // Sempre volta para a página 1 ao filtrar
+    setSelectedCategories(prev =>
+      prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]
+    );
+  };
+
   return (
-    <div className="bg-primary min-h-screen p-8 pt-10">
+    <div className="bg-primary min-h-screen p-8 pt-24">
       <div className="max-w-7xl mx-auto">
-        
-        <h1 className="text-white text-3xl font-bold mb-8">
+
+        <h1 className="text-white text-3xl font-bold mb-10">
           A inteligência que arremata.
         </h1>
 
-        <div className="flex flex-col lg:flex-row gap-8 items-start">
+        <div className="flex flex-col lg:flex-row gap-10 items-start">
 
+          {/* COLUNA DA ESQUERDA: LISTA E PAGINAÇÃO */}
           <div className="flex-1">
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-
-              <PropertyListCard status="green" />
-              <PropertyListCard status="yellow" />
-              <PropertyListCard status="yellow" />
-              <PropertyListCard status="green" />
-              <PropertyListCard status="red" />
-              <PropertyListCard status="green" />
-              <PropertyListCard status="green" />
-              <PropertyListCard status="yellow" />
-              <PropertyListCard status="green" />
-              <PropertyListCard status="red" />
-
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+              {currentItems.length > 0 ? (
+                currentItems.map(item => (
+                  <PropertyListCard key={item.id} data={item} />
+                ))
+              ) : (
+                <div className="col-span-full py-20 text-center border-2 border-dashed border-gray-800 rounded-2xl">
+                  <p className="text-gray-500">Nenhum imóvel encontrado nestas categorias.</p>
+                </div>
+              )}
             </div>
+
+            {/* PAGINAÇÃO RESTAURADA */}
+            {totalPages > 1 && (
+              <div className="flex justify-center items-center gap-8 mt-12 py-6 border-t border-gray-800">
+
+                {/* Botão Anterior */}
+                <button
+                  onClick={() => { setCurrentPage(p => p - 1); window.scrollTo(0, 0); }}
+                  className={`text-gray-500 hover:text-secondary transition-all duration-300 flex items-center gap-2 font-bold
+        ${currentPage === 1 ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+                >
+                  <ArrowBackIcon sx={{ fontWeight: 'bold' }} />
+                </button>
+
+                {/* Indicador de Página */}
+                <span className="text-gray-500 text-sm font-bold tracking-widest uppercase">
+                  Página {currentPage} / {totalPages}
+                </span>
+
+                {/* Botão Próxima */}
+                <button
+                  onClick={() => { setCurrentPage(p => p + 1); window.scrollTo(0, 0); }}
+                  className={`text-gray-500 hover:text-secondary transition-all duration-300 flex items-center gap-2 font-bold
+        ${currentPage === totalPages ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+                >
+                  <ArrowForwardIcon sx={{ fontWeight: 'bold' }} />
+                </button>
+
+              </div>
+            )}
           </div>
+          {/* COLUNA DA DIREITA: SIDEBAR (GLOSSÁRIO + FILTROS) */}
+            <aside className="w-full lg:w-80 flex flex-col gap-6 sticky top-28">
 
-          <aside className="w-full lg:w-80 flex flex-col gap-6 sticky top-24">
+              {/* GLOSSÁRIO RESTAURADO */}
+              <div className="bg-secondary-dark/10 border border-secondary/10 p-6 rounded-2xl shadow-xl">
+                <h2 className="text-white font-bold mb-6 text-xl border-b border-gray-800 pb-2">Glossário</h2>
+                <ul className="flex flex-col gap-4">
+                  <li className="flex items-center gap-3 text-gray-400 text-xs leading-relaxed">
+                    <div className="w-3 h-3 rounded-full bg-green-500 shrink-0 shadow-[0_0_8px_rgba(34,197,94,0.4)]" />
+                    Imóvel de documentação regular
+                  </li>
+                  <li className="flex items-center gap-3 text-gray-400 text-xs leading-relaxed">
+                    <div className="w-3 h-3 rounded-full bg-yellow-500 shrink-0 shadow-[0_0_8px_rgba(234,179,8,0.4)]" />
+                    Imóvel ocupado
+                  </li>
+                  <li className="flex items-center gap-3 text-gray-400 text-xs leading-relaxed">
+                    <div className="w-3 h-3 rounded-full bg-red-500 shrink-0 shadow-[0_0_8px_rgba(239,68,68,0.4)]" />
+                    Imóvel de financiamento não permitido
+                  </li>
+                </ul>
+              </div>
 
-            <div className="bg-secondary-dark/20 border border-secondary/10 p-6 rounded-2xl">
-              <h2 className="text-white font-bold mb-6 text-xl">Glossário</h2>
-              <ul className="flex flex-col gap-4">
-                <li className="flex items-center gap-3 text-gray-400 text-sm">
-                  <div className="w-3 h-3 rounded-full bg-green-500 shrink-0" />
-                  Imóvel de documentação regular
-                </li>
-                <li className="flex items-center gap-3 text-gray-400 text-sm">
-                  <div className="w-3 h-3 rounded-full bg-yellow-500 shrink-0" />
-                  Imóvel ocupado
-                </li>
-                <li className="flex items-center gap-3 text-gray-400 text-sm">
-                  <div className="w-3 h-3 rounded-full bg-red-500 shrink-0" />
-                  Imóvel de financiamento não permitido
-                </li>
-              </ul>
-            </div>
+              {/* CATEGORIAS FUNCIONAIS */}
+              <div className="bg-secondary-dark/10 border border-secondary/10 p-6 rounded-2xl shadow-xl">
+                <h2 className="text-white font-bold mb-6 text-xl border-b border-gray-800 pb-2">Categorias</h2>
+                <div className="grid grid-cols-1 gap-3">
+                  {categorias.map((cat) => (
+                    <label key={cat} className="flex items-center gap-3 text-gray-400 text-xs cursor-pointer hover:text-white transition-colors group">
+                      <input
+                        type="checkbox"
+                        className="hidden"
+                        checked={selectedCategories.includes(cat)}
+                        onChange={() => toggleCategory(cat)}
+                      />
+                      <div className={`w-4 h-4 rounded border transition-all flex items-center justify-center
+                      ${selectedCategories.includes(cat)
+                          ? 'bg-secondary border-secondary'
+                          : 'border-gray-700 bg-gray-900 group-hover:border-secondary'}`}
+                      >
+                        {selectedCategories.includes(cat) && <div className="w-2 h-2 bg-primary rounded-sm" />}
+                      </div>
+                      {cat}
+                    </label>
+                  ))}
+                </div>
+                {selectedCategories.length > 0 && (
+                  <button
+                    onClick={() => { setSelectedCategories([]); setCurrentPage(1); }}
+                    className="mt-6 text-[10px] text-secondary underline uppercase font-bold hover:text-secondary-light"
+                  >
+                    Limpar filtros
+                  </button>
+                )}
+              </div>
 
-            {/* Categorias */}
-            <div className="bg-secondary-dark/20 border border-secondary/10 p-6 rounded-2xl">
-              <h2 className="text-white font-bold mb-6 text-xl">Categorias</h2>
-              <div className="grid grid-cols-2 gap-4">
-              {['Casa', 'Apartamento', 'Galpão', 'Lajes', 'Outros'].map((cat) => (
-                <label key={cat} className="flex items-center gap-2 text-gray-400 text-sm cursor-pointer hover:text-white transition-colors">
-                  <input type="checkbox" className="w-4 h-4 rounded border-gray-700 bg-gray-800 checked:bg-secondary" />
-                  {cat}
-                </label>
-              ))}
-            </div>
-            </div>
-            
-          </aside>
+            </aside>
+
+          </div>
         </div>
       </div>
-    </div>
-  );
+      );
 }

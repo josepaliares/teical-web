@@ -5,67 +5,109 @@ import GavelIcon from '@mui/icons-material/Gavel';
 import LaunchIcon from '@mui/icons-material/Launch';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import type { PropertyData } from '../types'; // Importe suas definições
+import { formatCurrency } from '../types'; // Importe suas definições
 
-export default function Imovel() {
+interface ImovelProps {
+  data: PropertyData;
+}
+
+export default function Imovel({ data }: ImovelProps) {
+    const navigate = useNavigate();
+
+    // Mapeamento de labels e cores para o status
+    const statusInfo = {
+        green: { label: 'Desocupado', class: 'bg-green-900 border-green-500 text-green-400', dot: 'bg-green-400' },
+        yellow: { label: 'Ocupado', class: 'bg-yellow-900/30 border-yellow-500 text-yellow-400', dot: 'bg-yellow-400' },
+        red: { label: 'Financiamento Indisponível', class: 'bg-red-900/30 border-red-500 text-red-400', dot: 'bg-red-400' }
+    };
+
+    const currentStatus = statusInfo[data.status];
 
     return (
-        <div className="bg-primary min-h-screen p-8 pt-10">
+        <div className="bg-primary min-h-screen p-8 pt-24">
             <div className="max-w-7xl mx-auto">
-                <Link to="/imoveis" className="flex items-center gap-2 text-gray-400 hover:text-secondary transition-colors mb-6">
+                {/* Botão Voltar usando navigate(-1) para manter o histórico */}
+                <button 
+                    onClick={() => navigate(-1)} 
+                    className="flex items-center gap-2 text-gray-400 hover:text-secondary transition-colors mb-6"
+                >
                     <ArrowBackIcon fontSize="small" />
                     Voltar
-                </Link>
-                <div className="flex gap-10">
+                </button>
+
+                <div className="flex flex-col lg:flex-row gap-10">
+                    {/* Imagem Principal do Mock */}
                     <img
-                        src="https://images.unsplash.com/photo-1568605114967-8130f3a36994"
-                        alt="Imóvel"
-                        className="h-100 rounded-2xl"
+                        src={data.fotos[0]}
+                        alt={data.nome}
+                        className="w-full lg:w-[500px] h-[400px] object-cover rounded-2xl shadow-2xl"
                     />
+
                     <div className="flex flex-col gap-3 w-full">
-                        <h1 className="text-gray-200 font-bold text-xl truncate leading-tight pr-4">Nome do Imóvel em Leilão - 50m²</h1>
-                        <div className=" flex justify-between bg-primary-dark/90 w-full h-auto rounded-3xl border border-secondary-dark py-3 px-3">
-                            <h3 className="text-secondary-dark">
-                                <LocationPinIcon className="mr-3" />
+                        {/* Nome Dinâmico */}
+                        <h1 className="text-gray-200 font-bold text-2xl leading-tight pr-4">
+                            {data.nome}
+                        </h1>
+
+                        {/* Localização Dinâmica */}
+                        <div className="flex justify-between items-center bg-primary-dark/90 w-full h-auto rounded-3xl border border-secondary-dark py-3 px-5">
+                            <h3 className="text-secondary-dark flex items-center">
+                                <LocationPinIcon className="mr-3" fontSize="small" />
                                 Localização
                             </h3>
-                            <h3 className="text-gray-200 font-bold">Bairro, Cidade/UF</h3>
+                            <h3 className="text-gray-200 font-bold text-sm">
+                                {data.bairro ? `${data.bairro}, ` : ''}{data.cidade}/{data.uf}
+                            </h3>
                         </div>
-                        <div className=" flex justify-between items-center bg-primary-dark/90 w-full h-auto rounded-3xl border border-secondary-dark py-3 px-3">
-                            <h3 className="text-secondary-dark">
-                                <AttachMoneyIcon className="mr-3" />
+
+                        {/* Valores Dinâmicos */}
+                        <div className="flex justify-between items-center bg-primary-dark/90 w-full h-auto rounded-3xl border border-secondary-dark py-3 px-5">
+                            <h3 className="text-secondary-dark flex items-center">
+                                <AttachMoneyIcon className="mr-3" fontSize="small" />
                                 Valor
                             </h3>
-                            <div className="flex flex-col gap-1">
-                                <span className="text-gray-500 text-[10px] line-through decoration-gray-500 leading-none">
-                                    R$ 1.200.000,00
+                            <div className="flex flex-col items-end">
+                                <span className="text-gray-500 text-xs line-through decoration-gray-500 leading-none">
+                                    {formatCurrency(data.precoAvaliacao)}
                                 </span>
-                                <span className="text-green-500 text-xl font-black leading-none mb-2">
-                                    R$ 600.000,00
+                                <span className="text-green-500 text-2xl font-black leading-none mt-1">
+                                    {formatCurrency(data.precoAtual)}
                                 </span>
                             </div>
                         </div>
-                        <div className=" flex justify-between bg-green-900 border border-green-500 w-full h-auto rounded-3xl py-3 px-3">
-                            <h3 className="text-green-400">
-                                <div className="w-3 h-3 rounded-full bg-green-400 inline-block mr-3"/>
-                                Desocupado
+
+                        {/* Status Dinâmico */}
+                        <div className={`flex justify-between border w-full h-auto rounded-3xl py-3 px-5 transition-colors ${currentStatus.class}`}>
+                            <h3 className="flex items-center font-bold">
+                                <div className={`w-3 h-3 rounded-full inline-block mr-3 animate-pulse ${currentStatus.dot}`}/>
+                                {currentStatus.label}
                             </h3>
                         </div>
-                        <div className=" flex flex-col justify-between bg-primary-dark/90 w-full h-auto rounded-3xl border border-secondary-dark py-3 px-3">
-                            <h3 className="text-secondary-dark">
-                                <TextSnippetIcon className="mr-3" />
+
+                        {/* Análise de Edital */}
+                        <div className="flex flex-col justify-between bg-primary-dark/90 w-full h-auto rounded-3xl border border-secondary-dark py-4 px-5">
+                            <h3 className="text-secondary-dark flex items-center mb-2">
+                                <TextSnippetIcon className="mr-3" fontSize="small" />
                                 Análise de Edital
                             </h3>
-                            <div className="flex w-full gap-3 p-1 mt-2 mb-1">
-                                <button className="w-full rounded-2xl font-regular text-secondary-light border border-secondary-dark bg-secondary-dark/20 py-2 hover:bg-secondary-dark/50">Manual</button>
-                                <button className="w-full rounded-2xl font-regular text-secondary-light border border-secondary-dark bg-secondary-dark/20 py-2 hover:bg-secondary-dark/50">Inteligente</button>
+                            <div className="flex w-full gap-3">
+                                <button className="w-full rounded-2xl font-bold text-secondary-light border border-secondary-dark bg-secondary-dark/10 py-2 hover:bg-secondary-dark/40 transition-all">
+                                    Manual
+                                </button>
+                                <button className="w-full rounded-2xl font-bold text-primary border border-secondary bg-secondary py-2 hover:bg-secondary-light transition-all shadow-lg shadow-secondary/10">
+                                    Inteligente
+                                </button>
                             </div>
                         </div>
-                        <Link to='/' className="relative flex justify-center gap-3 bg-primary-dark/90 w-full h-auto rounded-3xl border border-secondary-dark py-3 px-3 hover:bg-secondary/20 transition-all duration-200">
-                            <h3 className="text-secondary font-bold">
+
+                        {/* Botão de Lance */}
+                        <Link to="/" className="relative flex justify-center items-center gap-3 bg-primary-dark/90 w-full h-auto rounded-3xl border border-secondary-dark py-4 px-3 hover:bg-secondary/10 transition-all duration-200 group">
+                            <h3 className="text-secondary font-black text-lg flex items-center">
                                 <GavelIcon className="mr-3" />
-                                Dar lançe
-                                <LaunchIcon className="absolute right-3"/>
+                                DAR LANCE
+                                <LaunchIcon className="absolute right-6 opacity-50 group-hover:opacity-100 transition-opacity" fontSize="small"/>
                             </h3>
                         </Link>
                     </div>
