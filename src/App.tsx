@@ -6,7 +6,6 @@ import Imovel from './pages/Imovel';
 import QuemSomos from './pages/QuemSomos';
 import Noticias from './pages/Noticias';
 import Conexoes from './pages/Conexoes';
-import Contato from './pages/Contato';
 import Login from './pages/Login';
 
 function App() {
@@ -21,7 +20,6 @@ function App() {
           <Route path="/quem-somos" element={<QuemSomos />} />
           <Route path="/noticias" element={<Noticias />} />
           <Route path="/conexoes" element={<Conexoes />} />
-          <Route path="/contato" element={<Contato />} />
         </Route>
 
         {/* Route without MainLayout */}
