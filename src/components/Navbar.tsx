@@ -62,14 +62,6 @@ export function Navbar() {
                   Conexões
                 </NavLink>
               </li>
-              <li>
-                <NavLink 
-                  to="/contato" 
-                  className={({ isActive }) => `${baseLink} ${isActive ? activeLink : 'text-gray-300'}`}
-                >
-                  Contato
-                </NavLink>
-              </li>
             </ul>
           </nav>
 
