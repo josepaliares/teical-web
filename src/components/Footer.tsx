@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 export function Footer() {
   return (
-    <footer className="bg-primary text-gray-400 py-12 px-8">
+    <footer className="bg-primary-dark text-gray-400 py-12 px-8">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
         
         <div className="flex flex-col gap-4">
@@ -18,7 +18,7 @@ export function Footer() {
         <div>
 
           <ul className="flex flex-col gap-2 text-sm mt-5">
-            <li><Link to="/servicos" className="hover:text-secondary transition-colors">Imóveis</Link></li>
+            <li><Link to="/imoveis" className="hover:text-secondary transition-colors">Imóveis</Link></li>
             <li><Link to="/" className="hover:text-secondary transition-colors">Notícias</Link></li>
             <li><Link to="/" className="hover:text-secondary transition-colors">Conexões</Link></li>
           </ul>
